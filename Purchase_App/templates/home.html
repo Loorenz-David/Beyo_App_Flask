@@ -1,0 +1,50 @@
+{% extends 'BASE.html' %}
+
+
+{% block stylesheet %}
+
+{% endblock %}
+
+
+
+{% block content %}
+<h1>some</h1>
+<h2>{{current_user.username}}</h2>
+
+<div>
+    <input type="text" id="username" placeholder="username">
+    <input type="text" id="password" placeholder="password">
+</div>
+<div>
+    <div id="btnSave" style="padding:10px 10px;border:1px solid grey" >Login</div>
+</div>
+
+{% endblock %}
+
+
+
+{% block js%}
+
+<script>
+
+    const btnSave = document.getElementById('btnSave')
+    const username= document.getElementById('username')
+    const password = document.getElementById('password')
+
+    btnSave.addEventListener('click',async()=>{
+        dict = {'email':username.value,'password':password.value}
+        let response = await fetch('/login',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(dict)
+
+        })
+
+        const result = await response.json();
+        console.log(result)
+    })
+    
+
+</script>
+
+{% endblock %}
