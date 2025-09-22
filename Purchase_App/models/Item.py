@@ -205,8 +205,8 @@ class Item_Stats_Current(db.Model,ModelMixin):
 def update_dealer_counts(dealer_obj, cost_count,item_count,connection):
                      
         dealerUpdateVals = {
-            'puchased_count': 
-                func.coalesce(Dealer.puchased_count,0) + cost_count ,
+            'purchased_count': 
+                func.coalesce(Dealer.purchased_count,0) + cost_count ,
             'item_count':
                 func.coalesce(Dealer.item_count,0) + item_count
         }

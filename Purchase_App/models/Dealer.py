@@ -24,7 +24,7 @@ class Dealer(db.Model,ModelMixin):
     dealer_notes = db.relationship('Dealer_Notes',back_populates='dealer')
     
     ## must correct misspeld r in purchased
-    puchased_count = db.Column(Integer,index=True) 
+    purchased_count = db.Column(Integer,index=True,default=0) 
     item_count = db.Column(Integer,index=True,default=0) 
     
     items = db.relationship('Item',back_populates='dealer')

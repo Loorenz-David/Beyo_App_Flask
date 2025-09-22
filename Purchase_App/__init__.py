@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_cors import CORS
 from datetime import datetime, timedelta
+from flask_migrate import Migrate
 
 if os.environ.get('FLASK_ENV') != 'production':
     from dotenv import load_dotenv
@@ -12,6 +13,8 @@ if os.environ.get('FLASK_ENV') != 'production':
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+migrate = Migrate()
+
 
 def create_app():
     app = Flask(__name__) 
@@ -39,12 +42,14 @@ def create_app():
 
     login_manager.login_view = 'home_bp.login'
 
+    migrate.init_app(app,db)
    
 
     from . import models
 
     with app.app_context():
-        db.create_all()
+        
+        pass
         # from .models.Item import Item
         # from .models.Dealer import Dealer
         
@@ -62,7 +67,7 @@ def create_app():
         # try:
 
         # from .models.Dealer import Dealer, Dealer_Type
-        # type = Dealer(dealer_name='Betty bernader', phone='+40 010101011',email='Betty@email.com',age=40,gender='Female',raw_address='171 45 Solna',coordinates={'lat':59.361549221941154,'lng':18.003097600202825},puchased_count=50000,item_count=400,dealer_type_id=3)
+        # type = Dealer(dealer_name='Betty bernader', phone='+40 010101011',email='Betty@email.com',age=40,gender='Female',raw_address='171 45 Solna',coordinates={'lat':59.361549221941154,'lng':18.003097600202825},purchased_count=50000,item_count=400,dealer_type_id=3)
         # db.session.add(type)
         # db.session.commit()
 
