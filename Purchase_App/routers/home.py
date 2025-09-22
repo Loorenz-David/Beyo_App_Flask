@@ -10,8 +10,7 @@ home_bp = Blueprint('home',__name__)
 
 @home_bp.route('/api',methods=['POST','GET'])
 def home():
-    import time
-    time.sleep(2)
+    
     response = build_response()
     status_code = 200
     
@@ -28,14 +27,14 @@ def home():
 
             response = build_response(200,'user is authenticated.',body=data)
             status_code = 200
-            print('in user auth')
+            
         else:
             response = build_response(400,'user not authenticated')
             status_code = 400
     except Exception as e:
         response = build_response(500,'Server Error', server_message=str(e))
         status_code= 400
-    print(response,status_code)
+    
     return jsonify(response),status_code
 
 
@@ -91,11 +90,11 @@ def login():
 def logout():
     reponse = build_response()
     status_code = 200
-    print(current_user)
+    
     try:
         logout_user()
         response = build_response(200,'User logged out')
-        print(current_user,'after log out')
+        
     except Exception as e:
         response = build_response(400,'Erro loging out',server_message=str(e))
         status_code = 400

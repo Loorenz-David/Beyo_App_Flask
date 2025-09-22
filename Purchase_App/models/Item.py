@@ -1,11 +1,11 @@
 from Purchase_App import db
-from sqlalchemy import String,Integer,Index, event,func,cast,text, inspect
+from sqlalchemy import String,Integer,Index, event,func,cast,text, inspect,select
 from sqlalchemy.dialects.postgresql import JSONB
 from .ModelMixin import ModelMixin
 from datetime import datetime,timezone
 import pprint
 from flask import current_app
-
+from sqlalchemy.orm import Session
 
 from .Dealer import Dealer
 
@@ -318,7 +318,8 @@ def update_item_stats_for_target(target,connection,negative=False,force_multipli
 
     multiplier = 1
     if target.category and target.category == 'For Resting':
-        multiplier = target.properties.get("Set Of", 1)
+        if target.properties:
+                multiplier = target.properties.get("Set Of", 1)
 
     if negative:
         if force_multiplier is not None:
@@ -684,7 +685,59 @@ def after_item_delete(mapper,connection,target):
     update_item_stats_for_target(target,connection,negative=True)
 
 
+def modify_note_counter(target,connection):
+    
+    subject_id = target.subject_id
+    count_query = select(func.count(Items_Notes.c.item_id))\
+        .select_from(Items_Notes.join(Item_Note))\
+        .where(Item_Note.subject_id == subject_id)
+        
+    notes_count = connection.execute(count_query).scalar_one()
+
+    connection.execute(
+       Item_Notes_Subject.__table__.update()
+       .where(Item_Notes_Subject.id == target.subject_id)
+       .values(
+           notes_counter = notes_count
+       )
+    )
+
    
+# @event.listens_for(Item_Note,"after_insert")
+# def after_note_added(mapper,connection,target):
+#     modify_note_counter(target,connection)
 
+# @event.listens_for(Item_Note,"after_delete")
+# def after_note_removed(mapper,connection,target):
+#     modify_note_counter(target,connection)
 
+@event.listens_for(Session,'after_flush')
+def update_notes_counter(session,flush_context):
+
+    subjects_to_update = set()
+
+    for obj in session.new:
+        if isinstance(obj,Item_Note) and obj.subject_id:
+            subjects_to_update.add(obj.subject_id)
+        
+    for obj in session.deleted:
+        if isinstance(obj,Item_Note) and obj.subject_id:
+            subjects_to_update.add(obj.subject_id)
+
+    for subject_id in subjects_to_update:
+       
+        
+        count_query = select(func.count(Items_Notes.c.item_id))\
+            .select_from(Items_Notes.join(Item_Note))\
+            .where(Item_Note.subject_id == subject_id)
+            
+        notes_count = session.execute(count_query).scalar_one()
+        print(notes_count,'the count to be added')
+        session.execute(
+        Item_Notes_Subject.__table__.update()
+        .where(Item_Notes_Subject.id == subject_id)
+        .values(
+            notes_counter = notes_count
+        )
+        )
 

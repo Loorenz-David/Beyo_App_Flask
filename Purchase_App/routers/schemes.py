@@ -287,7 +287,7 @@ def delete_items():
             reference = validation['reference']
 
             delete_object(model_name,object_values)
-
+            print(reference,'....')
             return {'reference':reference}
         
         if isinstance(body,list):
@@ -301,6 +301,7 @@ def delete_items():
             delete = delete_call(body)
             response = build_response(201,f'{delete['reference']} Deleted!')
             status_code = 201
+            print(response,'response fom delition')
 
     except ValidationError as ve:
         response = build_response(400,f'[Validation Error] Invalid data for {body.get('reference','entry')}.',server_message=str(ve))

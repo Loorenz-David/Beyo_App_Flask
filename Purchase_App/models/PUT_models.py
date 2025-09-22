@@ -59,7 +59,16 @@ def link_to_relationship(source_obj,user_data,column_name):
                     fill_object(obj,also_do,commit=False)
 
         else:
-            raise Exception(f'"error in function link_to_relationship()" No object found in model {model_name} when trying to link relationship,column name: {column_name} filters_passed: {value['query_filters']}  ')
+            action_if_none = value.get('action_if_none')
+            if action_if_none:
+                values_for_none_action = value.get('values_for_none_action')
+                
+                if action_if_none == 'create_entry':
+                    new_entry = create_entry(model_name,values_for_none_action,commit=False)
+                    setattr(source_obj,column_name,new_entry)
+
+            else:
+                raise Exception(f'"error in function link_to_relationship()" No object found in model {model_name} when trying to link relationship,column name: {column_name} filters_passed: {value['query_filters']}  ')
 
 
 #{unlink_type:all_matches / unlink_matches, query_filters: check run_query() guidance,query_matches:'all_matches'/first_match }     
@@ -186,7 +195,7 @@ def is_relationship(model,column_name,mapper=None):
 def fill_object(target_object,object_values,commit=True,add_session=True,verbose=False,coming_from='Update'):
 
     target_model = target_object.__class__
-
+    print('in fill object for: ',target_object, target_model)
     mapper = inspect(target_model)
 
     required_columns = [ col.name for col in mapper.columns 
@@ -235,8 +244,13 @@ def fill_object(target_object,object_values,commit=True,add_session=True,verbose
                     fill_object(relVal,values,commit=False)
                 continue
 
+            elif action == 'query_if_none_create':
+                query_filters = value.get('query_filters')
+                query = run_query(query_filters).first()
+                if query:
+                    link_to_relationship()
                 
-               
+            
             else:
                 raise Exception(f'"error in function fill_object()" invalid action in key: action')
         

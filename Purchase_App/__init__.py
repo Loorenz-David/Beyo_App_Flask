@@ -14,8 +14,8 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app():
-    app = Flask(__name__)
-    CORS(app,supports_credentials=True,origins=['https://10.126.200.75:5173/'])
+    app = Flask(__name__) 
+    CORS(app,supports_credentials=True,origins=[os.environ.get('FRONT_END_URL')])
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
     app.config['SECRET_KEY'] = os.environ.get('SECRETE_KEY')
 
