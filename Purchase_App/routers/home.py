@@ -37,7 +37,7 @@ def home():
     except Exception as e:
         response = build_response(500,'Server Error', server_message=str(e))
         status_code= 400
-    
+    print(response,'response from home')
     return jsonify(response),status_code
 
 
@@ -46,9 +46,10 @@ def home():
 
 @home_bp.route('/api/login',methods=['POST'])
 def login():
-    
+    print('Headers',request.headers)
+    print('Body',request.get_data())
     body = request.get_json()
-
+    print('Parse JSON: ', body)
     reponse = build_response()
     status_code = 200
     
@@ -81,6 +82,8 @@ def login():
         status_code = 200
     
     except Exception as e:
+        print('exception _-------')
+        print(Exception)
         response = build_response(400,'incorrect login',server_message=str(e))
         status_code = 401
     
