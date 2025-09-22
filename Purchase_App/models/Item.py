@@ -31,32 +31,32 @@ class Item(db.Model,ModelMixin):
 
     # CHAIR {structure: backrest upholster / seat upholster, set_of:10, designer:johans}
     # TABLE {structure: round, extentions:outside, extention_count:4, legs: standar}
-    properties = db.Column(JSONB,nullable=True)
+    properties = db.Column(JSONB,nullable=True,default={})
 
     # DIMENSIONS {height:200,width:100,depth:40}
-    dimensions = db.Column(JSONB,nullable=True)
+    dimensions = db.Column(JSONB,nullable=True,default={})
 
 
     # and example of the list of dicts item_issues can hold
     # [{type:scratch, location:upperframe, level: deep}, {type:indent,location:vinil,level:missing}]
-    issues = db.Column(JSONB,nullable=True)
+    issues = db.Column(JSONB,nullable=True,default=[])
 
     # [{part:leg, count:4},{part:extention,count:2}]
-    parts = db.Column(JSONB,nullable=True)
+    parts = db.Column(JSONB,nullable=True,,default=[])
 
     #[{part:leg,count:1},{part:extention,count:1}]
-    missing_parts = db.Column(JSONB,nullable=True)
+    missing_parts = db.Column(JSONB,nullable=True,,default=[])
 
 
 
     #[{subject:missing dimensions, content:'some content'}]
     notes = db.relationship('Item_Note',secondary=Items_Notes,back_populates='items')
 
-    purchased_price = db.Column(Integer,index=True,nullable=True)
-    valuation = db.Column(Integer,index=True,nullable=True)
-    sold_price = db.Column(Integer,index=True,nullable=True)
+    purchased_price = db.Column(Integer,index=True,nullable=True,default=0)
+    valuation = db.Column(Integer,index=True,nullable=True,default=0)
+    sold_price = db.Column(Integer,index=True,nullable=True,default=0)
 
-    metafields = db.Column(JSONB,nullable=True)
+    metafields = db.Column(JSONB,nullable=True,default={})
 
 
     state = db.Column(String,index=True,nullable=True)
@@ -145,7 +145,7 @@ class Item_Notes_Subject(db.Model,ModelMixin):
 
     id = db.Column(Integer,primary_key=True)
     subject = db.Column(String,index=True)
-    notes_counter = db.Column(Integer)
+    notes_counter = db.Column(Integer,default=0)
     item_notes = db.relationship('Item_Note',back_populates='subject')
 
 class Item_Note(db.Model,ModelMixin):
@@ -182,22 +182,22 @@ class Item_Stats_Current(db.Model,ModelMixin):
 
     id = db.Column(Integer,primary_key=True)
     stats_for = db.Column(String,index=True)
-    category = db.Column(JSONB)
-    type = db.Column(JSONB)
+    category = db.Column(JSONB,default={})
+    type = db.Column(JSONB,default={})
 
 
-    properties = db.Column(JSONB)
-    dimensions = db.Column(JSONB)
-    issues = db.Column(JSONB)
-    parts = db.Column(JSONB)
-    missing_parts = db.Column(JSONB)
+    properties = db.Column(JSONB,default={})
+    dimensions = db.Column(JSONB,default={})
+    issues = db.Column(JSONB,default={})
+    parts = db.Column(JSONB,default={})
+    missing_parts = db.Column(JSONB,default={})
 
-    purchased_price = db.Column(Integer)
-    valuation = db.Column(Integer)
-    sold_price = db.Column(Integer)
+    purchased_price = db.Column(Integer,default=0)
+    valuation = db.Column(Integer,default=0)
+    sold_price = db.Column(Integer,default=0)
 
-    state = db.Column(JSONB)
-    location = db.Column(JSONB)
+    state = db.Column(JSONB,default={})
+    location = db.Column(JSONB,default={})
 
 
 # this following section handles the Creation, Update and Delete of Item_Stats_Current
