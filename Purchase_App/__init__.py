@@ -44,7 +44,7 @@ def create_app():
     from . import models
 
     with app.app_context():
-        pass
+        db.create_all()
         # from .models.Item import Item
         # from .models.Dealer import Dealer
         
