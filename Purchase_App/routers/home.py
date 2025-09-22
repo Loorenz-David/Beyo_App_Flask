@@ -13,8 +13,11 @@ def home():
     
     response = build_response()
     status_code = 200
-    
+    print('Headers',request.headers)
+    print('Body',request.get_data())
+
     payload = request.get_json(silent=True)
+    print('Parse JSON: ', payload)
     unpack_columns = None
     if payload:
         unpack_columns = payload.get('requested_data',None)

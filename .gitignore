@@ -5,3 +5,5 @@ tests
 certs
 __pycache__
 .DS_Store
+force_migration.py
+.venv
