@@ -1,1 +1,1 @@
-web: gunicorn Purchase_App.__init__:create_app --workers 3
+web: gunicorn 'Purchase_App.__init__:create_app()' --workers 3

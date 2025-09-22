@@ -42,10 +42,10 @@ class Item(db.Model,ModelMixin):
     issues = db.Column(JSONB,nullable=True,default=[])
 
     # [{part:leg, count:4},{part:extention,count:2}]
-    parts = db.Column(JSONB,nullable=True,,default=[])
+    parts = db.Column(JSONB,nullable=True,default=[])
 
     #[{part:leg,count:1},{part:extention,count:1}]
-    missing_parts = db.Column(JSONB,nullable=True,,default=[])
+    missing_parts = db.Column(JSONB,nullable=True,default=[])
 
 
 
