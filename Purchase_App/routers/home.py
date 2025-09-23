@@ -13,11 +13,8 @@ def home():
     
     response = build_response()
     status_code = 200
-    print('Headers',request.headers)
-    print('Body',request.get_data())
 
     payload = request.get_json(silent=True)
-    print('Parse JSON: ', payload)
     unpack_columns = None
     if payload:
         unpack_columns = payload.get('requested_data',None)
@@ -32,12 +29,11 @@ def home():
             status_code = 200
             
         else:
-            response = build_response(400,'user not authenticated')
-            status_code = 400
+            response = build_response(401,'user not authenticated')
+            status_code = 401
     except Exception as e:
         response = build_response(500,'Server Error', server_message=str(e))
         status_code= 400
-    print(response,'response from home')
     return jsonify(response),status_code
 
 
@@ -46,10 +42,9 @@ def home():
 
 @home_bp.route('/api/login',methods=['POST'])
 def login():
-    print('Headers',request.headers)
-    print('Body',request.get_data())
+    
     body = request.get_json()
-    print('Parse JSON: ', body)
+   
     reponse = build_response()
     status_code = 200
     
