@@ -52,7 +52,7 @@ def login():
 
         user_email = body.get('email')
         user_pass = body.get('password')
-        user_info_request = body.get('request_info',['username',{'roles':['role','id']}])
+        user_info_request = body.get('request_info',['username',{'roles':['role','id']},'profile_picture'])
 
         if not user_email:
             raise Exception(f'missing email')

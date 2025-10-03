@@ -7,3 +7,4 @@ __pycache__
 .DS_Store
 force_migration.py
 .venv
+/DB_Transfer_Heroku_To_Render

@@ -67,13 +67,13 @@ class Item(db.Model,ModelMixin):
 
 
 
-    item_history = db.relationship('Item_History',back_populates='item')
+    item_history = db.relationship('Item_History',back_populates='item',cascade='all, delete-orphan')
 
     created_at = db.Column(db.DateTime,default=lambda:datetime.now(timezone.utc))
     created_by = db.Column(String,nullable=True)
 
-    dealer_id = db.Column(Integer,db.ForeignKey('Dealer.id'))
-    dealer = db.relationship('Dealer',back_populates='items')
+    dealer_id = db.Column(Integer,db.ForeignKey('Dealer.id',ondelete='SET NULL'), nullable=True)
+    dealer = db.relationship('Dealer',back_populates='items',passive_deletes=True)
     # client_id = db.Column(Integer,db.ForeignKey())
 
 
@@ -171,7 +171,7 @@ class Item_History(db.Model,ModelMixin):
     from_value = db.Column(JSONB)
     to_value = db.Column(JSONB)
     recorded_time = db.Column(db.DateTime,default=lambda: datetime.now(timezone.utc))
-    item_id = db.Column(Integer,db.ForeignKey('Item.id'))
+    item_id = db.Column(Integer,db.ForeignKey('Item.id',ondelete='CASCADE'),index=True)
     item = db.relationship('Item',back_populates='item_history')
     type = db.Column(String, nullable=True,index=True)
     user_name= db.Column(String,nullable=True)

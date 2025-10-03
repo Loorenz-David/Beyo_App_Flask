@@ -24,7 +24,7 @@ schemes_bp = Blueprint('schemes',__name__,url_prefix='/api/schemes')
 @login_required
 def get_items():
     
-    
+   
 
     body = request.get_json()
     response = build_response()
@@ -32,7 +32,7 @@ def get_items():
 
     try:
         
-    
+        
         validate = GetItemsSchema().load(body)
     
         model_name = validate['model_name']
@@ -99,6 +99,7 @@ def create_items():
     
 
     try:
+        
         
         def creation_call(item):
             
@@ -195,8 +196,9 @@ def update_items():
     body = request.get_json()
     response = build_response()
     status_code = 200
-   
+    
     try:
+        
 
         def update_call(body):
             validation = UpdateItemsSchema().load(body)
@@ -280,6 +282,7 @@ def delete_items():
     status_code = 200
 
     try:
+       
         def delete_call(body):
             validation = DeleteItemsSchema().load(body)
             model_name = validation['model_name']
