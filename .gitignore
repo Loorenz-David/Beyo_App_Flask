@@ -9,3 +9,5 @@ force_migration.py
 .venv
 /DB_Transfer_Heroku_To_Render
 fly.toml
+
+db_run_scripts/

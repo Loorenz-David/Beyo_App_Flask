@@ -19,7 +19,7 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__) 
     CORS(app,supports_credentials=True,origins=[os.environ.get('FRONT_END_URL')])
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("postgres://","postgresql://",1)
     app.config['SECRET_KEY'] = os.environ.get('SECRETE_KEY')
 
     # this disables the event listeners on the modification on database, I might use "signal" later one

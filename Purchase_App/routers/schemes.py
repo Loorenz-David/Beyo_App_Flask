@@ -144,19 +144,19 @@ def create_items():
        
 
     except ValidationError as ve:
-        response = build_response(400,f'[Validation Error] Invalid data for {body.get('reference','entry')}.',server_message=ve.messages)
+        response = build_response(400,f"[Validation Error] Invalid data for {body.get('reference','entry')}.",server_message=ve.messages)
         status_code = 400
 
     except IntegrityError as ie:
         
         error_msg = str(ie)
-        message = f'[Database Ingerity Error] Constrain faild on {body.get('reference','entry')}.'
+        message = f"[Database Ingerity Error] Constrain faild on {body.get('reference','entry')}."
         if 'duplicate key value violates unique constraint' in error_msg:
             match = re.search(r'Key \((\w+)\)=\((.*?)\)',error_msg) 
             if match:
                 match_field = match.group(1)
                 match_value = match.group(2)
-                message = f'[Database Ingerity Error] The value "{match_value}" for field -{match_field}- alreade exist. Please choose another. '
+                message = f"[Database Ingerity Error] The value '{match_value}' for field -{match_field}- alreade exist. Please choose another. "
                 
         elif '(psycopg2.errors.NotNullViolation)' in error_msg:
             match = re.search(f'value in column "([^"]+)"',error_msg)
@@ -171,19 +171,19 @@ def create_items():
 
     except DataError as de:
         
-        response =build_response(400,f'[Database Data Error] Invalid data type or value when creating {body.get('reference','entry')}.',server_message=str(de))
+        response =build_response(400,f"[Database Data Error] Invalid data type or value when creating {body.get('reference','entry')}.",server_message=str(de))
         status_code = 400
         db.session.rollback()
 
     except OperationalError as oe:
         
-        response =build_response(400,f'[Database Operational Error] DB error ocurred when creating {body.get('reference','entry')}.',server_message=str(oe))
+        response =build_response(400,f"[Database Operational Error] DB error ocurred when creating {body.get('reference','entry')}.",server_message=str(oe))
         status_code = 400
         db.session.rollback()
 
     except Exception as e:
         
-        response = build_response(400,f'[Exception Error] Error creating {reference}.', server_message=str(e))
+        response = build_response(400,f"[Exception Error] Error creating {reference}.", server_message=str(e))
         status_code = 400
         db.session.rollback()
     
@@ -225,25 +225,25 @@ def update_items():
 
         elif isinstance(body,dict):
             update = update_call(body)
-            response = build_response(201,f'{update['reference']} Updated!')
+            response = build_response(201,f"{update['reference']} Updated!")
             status_code = 201
         else:
             raise Exception('Incorrect body format, it should be list of dicts or dict.')
 
 
     except ValidationError as ve:
-        response = build_response(400,f'[Validation Error] Invalid Data for {body.get('reference','entry')}.',server_message=str(ve))
+        response = build_response(400,f"[Validation Error] Invalid Data for {body.get('reference','entry')}.",server_message=str(ve))
         status_code = 400
     except IntegrityError as ie:
        
         error_msg = str(ie)
-        message = f'[Database Ingerity Error] Constrain faild on {body.get('reference','entry')}.'
+        message = "[Database Ingerity Error] Constrain faild on {body.get('reference','entry')}."
         if 'duplicate key value violates unique constraint' in error_msg:
             match = re.search(r'Key \((\w+)\)=\((.*?)\)',error_msg) 
             if match:
                 match_field = match.group(1)
                 match_value = match.group(2)
-                message = f'[Database Ingerity Error] The value "{match_value}" for field -{match_field}- alreade exist. Please choose another. '
+                message = f"[Database Ingerity Error] The value '{match_value}' for field -{match_field}- alreade exist. Please choose another. "
                 
         elif '(psycopg2.errors.NotNullViolation)' in error_msg:
             match = re.search(f'value in column "([^"]+)"',error_msg)
@@ -258,12 +258,12 @@ def update_items():
 
     except DataError as de:
         db.session.rollback()
-        response =build_response(400,f'[Database Data Error] Invalid data type or value when updating {body.get('reference','entry')}.',server_message=str(de))
+        response =build_response(400,f"[Database Data Error] Invalid data type or value when updating {body.get('reference','entry')}.",server_message=str(de))
         status_code = 400
 
     except OperationalError as oe:
         db.session.rollback()
-        response =build_response(400,f'[Database Operational Error] DB error ocurred when updating {body.get('reference','entry')}.',server_message=str(oe))
+        response =build_response(400,f"[Database Operational Error] DB error ocurred when updating {body.get('reference','entry')}.",server_message=str(oe))
         status_code = 400
 
     except Exception as e:
@@ -302,33 +302,33 @@ def delete_items():
             status_code = 201
         elif isinstance(body,dict):
             delete = delete_call(body)
-            response = build_response(201,f'{delete['reference']} Deleted!')
+            response = build_response(201,f"{delete['reference']} Deleted!")
             status_code = 201
             print(response,'response fom delition')
 
     except ValidationError as ve:
-        response = build_response(400,f'[Validation Error] Invalid data for {body.get('reference','entry')}.',server_message=str(ve))
+        response = build_response(400,f"[Validation Error] Invalid data for {body.get('reference','entry')}.",server_message=str(ve))
         status_code = 400
 
     except IntegrityError as ie:
         db.session.rollback()
-        response =build_response(400,f'[Database Ingerity Error] Constrain faild on {body.get('reference','entry')}.',server_message=str(ie))
+        response =build_response(400,f"[Database Ingerity Error] Constrain faild on {body.get('reference','entry')}.",server_message=str(ie))
         status_code = 400
 
     except DataError as de:
         db.session.rollback()
-        response =build_response(400,f'[Database Data Error] Invalid data type or value when deleting {body.get('reference','entry')}.',server_message=str(de))
+        response =build_response(400,f"[Database Data Error] Invalid data type or value when deleting {body.get('reference','entry')}.",server_message=str(de))
         status_code = 400
 
     except OperationalError as oe:
         db.session.rollback()
-        response =build_response(400,f'[Database Operational Error] DB error ocurred when deleting {body.get('reference','entry')}.',server_message=str(oe))
+        response =build_response(400,f"[Database Operational Error] DB error ocurred when deleting {body.get('reference','entry')}.",server_message=str(oe))
         status_code = 400
 
 
     except Exception as e:
         db.session.rollback()
-        response = build_response(400,f'[Exception Error] Error Deleting {reference}.', server_message=str(e))
+        response = build_response(400,f"[Exception Error] Error Deleting {reference}.", server_message=str(e))
         status_code = 400
     
     return jsonify(response), status_code

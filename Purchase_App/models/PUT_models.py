@@ -68,7 +68,7 @@ def link_to_relationship(source_obj,user_data,column_name):
                     setattr(source_obj,column_name,new_entry)
 
             else:
-                raise Exception(f'"error in function link_to_relationship()" No object found in model {model_name} when trying to link relationship,column name: {column_name} filters_passed: {value['query_filters']}  ')
+                raise Exception(f''' "error in function link_to_relationship()" No object found in model {model_name} when trying to link relationship,column name: {column_name} filters_passed: {value['query_filters']}  ''')
 
 
 #{unlink_type:all_matches / unlink_matches, query_filters: check run_query() guidance,query_matches:'all_matches'/first_match }     
@@ -173,7 +173,7 @@ def validate_value_in_column(value,column_name,target_model,mapper=None):
                 raise Exception(f'Invalid datetime string {value}, for column {column_name}.')
     
     if value and not isinstance(value,expected_type):
-        raise Exception(f'Value "{value}" with type "{type(value)}" is invalid. Column {column_name} accepts value type {expected_type} in model {target_model.__name__}')
+        raise Exception(f'''Value "{value}" with type "{type(value)}" is invalid. Column {column_name} accepts value type {expected_type} in model {target_model.__name__}''')
 
     # if type(value) == str and value.strip() == '':
     #     raise Exception(f'Value cannot be empty string in "{column_name}"')
