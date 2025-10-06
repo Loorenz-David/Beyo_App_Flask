@@ -16,7 +16,7 @@ class ModelMixin():
         
         if isinstance(columns_to_unpack,list):
             for column in columns_to_unpack:
-                       
+                print(column,'the column being unpacked')
                 if isinstance(column,dict):
                     for key, values in column.items():
                         

@@ -172,11 +172,12 @@ def run_query(model_name,query_dict,cursor=None):
         final_filters = and_(*and_filters)
     
 
-    
+  
     if final_filters is not None:
         query = query.filter(final_filters)
 
     query = query.order_by(target_model.id.desc())
+    
     
     if cursor:
         query = query.filter(target_model.id < cursor)

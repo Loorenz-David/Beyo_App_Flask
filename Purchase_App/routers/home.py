@@ -1,10 +1,13 @@
-from flask import Blueprint\
+from flask import Blueprint, app\
 ,render_template,jsonify  \
 ,request
 from werkzeug.security import generate_password_hash,check_password_hash
 from Purchase_App.models.query import run_query
 from flask_login import login_required,login_user,current_user,logout_user
 from .responses import build_response
+import jwt
+import datetime
+from token_wraper import token_required
 
 home_bp = Blueprint('home',__name__) 
 
@@ -70,8 +73,15 @@ def login():
         login_user(user_match)
 
 
-        user_info = [user_match.to_dict(user_info_request)]
-       
+        user_info = user_match.to_dict(user_info_request)
+        token= jwt.encode(
+                            user_info,exp=datetime.datetime.utcnow()+datetime.timedelta(days=7),
+                           key=app.config['SECRET_KEY'],
+                           algorithm='HS256'
+                           )
+                           
+        user_info = [{"token":token,
+                      'payload':user_info}] 
 
         response = build_response(200,'user login!',body=user_info)
         status_code = 200
@@ -87,7 +97,7 @@ def login():
 
 
 @home_bp.route('/api/logout',methods=['POST'])
-@login_required
+@token_required
 def logout():
     reponse = build_response()
     status_code = 200
@@ -102,11 +112,7 @@ def logout():
 
     return jsonify(response),status_code
 
-@home_bp.route('/register',methods=['POST'])
-def register():
-    
-    required_for_registration = ['username','email','phone']
-    body = request.get_json()
+
     
     
 

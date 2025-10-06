@@ -9,6 +9,7 @@ from .schemes_validation import CreateItemsSchema,GetItemsSchema,UpdateItemsSche
 from sqlalchemy.exc import IntegrityError, DataError, OperationalError
 import re
 from datetime import datetime
+from token_wraper import token_required
 
 schemes_bp = Blueprint('schemes',__name__,url_prefix='/api/schemes')
 # --------------------------------------------------------------------------------
@@ -21,7 +22,7 @@ schemes_bp = Blueprint('schemes',__name__,url_prefix='/api/schemes')
 # --------------------------------------------------------------------------------
 
 @schemes_bp.route('/get_items',methods=['GET','POST'])
-@login_required
+@token_required
 def get_items():
     
    
@@ -90,14 +91,14 @@ def get_items():
 
 
 @schemes_bp.route('/create_items',methods=['POST'])
-@login_required
+@token_required
 def create_items():
     body = request.get_json()
     response = build_response()
     status_code = 200
     
     
-
+    
     try:
         
         
@@ -191,7 +192,7 @@ def create_items():
 
 
 @schemes_bp.route('/update_items',methods=['POST'])
-@login_required
+@token_required
 def update_items():
     body = request.get_json()
     response = build_response()
@@ -275,12 +276,12 @@ def update_items():
     return jsonify(response), status_code
 
 @schemes_bp.route('/delete_items',methods=['POST'])
-@login_required
+@token_required
 def delete_items():
     body = request.get_json()
     response = build_response()
     status_code = 200
-
+    print(body,'the body that was received when deleting item')
     try:
        
         def delete_call(body):
